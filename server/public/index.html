@@ -20,16 +20,25 @@
 
         <main>
 
+            <!-- The below form is for creating the mathematical equations -->
             <form id="Calculator">
-                <input type="mathematical operation" placeholder="First Number">
+                <input type="number" placeholder="First Number">
                 <button id="add-btn">+</button>
                 <button id="subtract-btn">-</button>
-                <button id="multiply-btn">﹡</button>
+                <button id="multiply-btn">∗</button>
                 <button id="divide-btn">/</button>
-                <input type="mathematical operation" placeholder="Second Number">
+                <input type="number" placeholder="Second Number">
                 <button id="equals-Submit">=</button>
             </form>
--
+
+            <div id="answer-deposit">
+                <!-- Result from server goes here -->
+            </div>
+
+            <ul id="history-deposit">
+                <!-- Calculator history from server goes here -->
+            </ul>
+
         </main>
 
         <footer>
