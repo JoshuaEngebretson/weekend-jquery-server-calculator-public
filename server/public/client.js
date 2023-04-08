@@ -5,7 +5,7 @@ let operator;
 
 function onReady() {
    //Call to get the page initially in sync with the server
-   makeGetCall();
+   getCalcHistory();
 
    //Create listener to declare value of operator
    // example if clicked would assign operator
@@ -15,7 +15,7 @@ function onReady() {
    $('#equals-Submit').on('click', equalsSubmit)
  }
 
-
+//Capture math operation and POST to server
 function equalsSubmit(event) {
    event.preventDefault();
    console.log('in equalsSubmit');
@@ -26,69 +26,11 @@ function equalsSubmit(event) {
       operator: operator
    };
 
-   //reset input fields on function call
-   //resetInput()
-   $('#num1').val('');
-   $('#num2').val('');
-
-   makeGetCall();
-}// End equalsSubmit
-
-
-function setOperator(event) {
-   event.preventDefault();
-
-   //Set value of operator depending on the id
-   // of the button that was clicked.
-   if ($(this).attr('id') === 'add-btn') {
-      operator = 'add'
-   }// End if add
-   else if ($(this).attr('id') === 'subtract-btn'){
-      operator = 'subtract'
-   }// End if subtract
-   else if ($(this).attr('id') === 'multiply-btn'){
-      operator = 'multiply'
-   }// End if multiply
-   else if ($(this).attr('id') === 'divide-btn'){
-      operator = 'divide'
-   }// End if divide
-
-   console.log(operator);
-   
-}
-
-
-// function to GET the DOM in sync with server
-function makeGetCall() {
-
-   $.ajax({
-      method: 'GET',
-      url: '/calculator',
-   }).then(
-      function (response) {
-         console.log('GET /calculator call successful');
-         console.log('response:', response);
-      }
-   ).catch(
-      function (error) {
-         console.log('GET /calculator call failed');
-         console.log('error:', error);
-      }
-   );
-}// End makeGetCall
-
-
-// function to POST info to server
-function makePostCall() {
-   let newThing = {
-      name: 'thing name',
-      description: 'thing description',
-   };
-
+   // Send mather operation to server
    $.ajax({
       method: 'POST',
       url: '/calculator',
-      data: newThing
+      data: calculatedQuestion
    }).then(
       function (response) {
          console.log('POST /calculator call successful');
@@ -100,5 +42,66 @@ function makePostCall() {
          console.log('error:', error);
       }
    )
-}// End makePostCall
+
+   //reset input fields on function call
+   //resetInput()
+   $('#num1').val('');
+   $('#num2').val('');
+
+   console.log(calculatedQuestion);
+
+   $('.operator-btn').removeClass('blued-out')
+
+   getCalcHistory();
+}// End equalsSubmit
+
+
+function setOperator(event) {
+   event.preventDefault();
+
+   // Remove coloring from all operator-btn
+   // This helps ensure we don't have multiple
+   // buttons showing as blue ever
+   $('.operator-btn').removeClass('blued-out')
+
+   //Set value of operator depending on the id
+   // of the button that was clicked.
+   if ($(this).attr('id') === 'add-btn') {
+      operator = 'add'
+      $(this).addClass('blued-out')
+   }// End if add
+   else if ($(this).attr('id') === 'subtract-btn'){
+      operator = 'subtract'
+      $(this).addClass('blued-out')
+   }// End if subtract
+   else if ($(this).attr('id') === 'multiply-btn'){
+      operator = 'multiply'
+      $(this).addClass('blued-out')
+   }// End if multiply
+   else if ($(this).attr('id') === 'divide-btn'){
+      operator = 'divide'
+      $(this).addClass('blued-out')
+   }// End if divide
+}// End setOperator
+
+
+// function to GET the DOM in sync with server
+function getCalcHistory() {
+
+   $.ajax({
+      method: 'GET',
+      url: '/calculator',
+   }).then(
+      function (response) {
+         console.log('GET /calculator call successful');
+         console.log('response:', response);
+         updateHistory(response)
+      }
+   ).catch(
+      function (error) {
+         console.log('GET /calculator call failed');
+         console.log('error:', error);
+      }
+   );
+}// End makeGetCall
 

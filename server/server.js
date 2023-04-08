@@ -2,6 +2,9 @@
 const express = require('express');
 let bodyParser = require('body-parser');
 
+let questionArray = [];
+let questionAndAnswerString;
+
 
 const app = express();
 
@@ -16,15 +19,35 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Example GET request
 app.get('/calculator', (req, res) => {
    console.log('GET /calculator request received!');
-   res.send('GET /calculator response');
+   res.send(questionArray);
 })// End Example GET request
 
 
 // Example POST request
 app.post('/calculator', (req, res) => {
    console.log('POST /calculator request received');
-   let requestedThing = req.body;
-   console.log('POST /calculator request:', requestedThing);
+   let newQuestion = req.body;
+
+   let num1 = newQuestion.num1
+   let num2 = newQuestion.num2
+   let operator = newQuestion.operator
+
+   let answer = calculator(num1, num2, operator)
+
+
+   let currentQuestion = {
+      num1: num1,
+      num2: num2,
+      operator: operator,
+      answer: answer,
+      string: questionAndAnswerString
+   }
+
+   console.log(`questionAndAnswerString: ${currentQuestion.string}`);
+
+   questionArray.push(currentQuestion)
+
+   console.log(questionArray);
 
    res.sendStatus(201);
 })// End Example POST request
@@ -41,15 +64,19 @@ function calculator(num1, num2, operator) {
 
    if (operator === 'add') {
       answer = (num1 + num2)
+      questionAndAnswerString = `${num1} + ${num2} = ${answer}`
    }// End add
    else if (operator === 'subtract') {
       answer = (num1 - num2)
+      questionAndAnswerString = `${num1} - ${num2} = ${answer}`
    }// End subtract
    else if (operator === 'multiply') {
       answer = (num1 * num2)
+      questionAndAnswerString = `${num1} * ${num2} = ${answer}`
    }// End multiply
    else if (operator === 'divide') {
       answer = (num1 / num2)
+      questionAndAnswerString = `${num1} / ${num2} = ${answer}`
    }// End divide
    else {
       answer = `Bad info received. num1--> ${num1}, num2--> ${num2}, operator --> '${operator}'`;
