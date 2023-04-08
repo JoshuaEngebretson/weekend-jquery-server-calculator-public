@@ -114,11 +114,14 @@ function updateHistory(calcHistory){
 
    $('#history-deposit').empty();
 
+   let x = 0;
+
    //loop through historyArray and add new list item
    // to ul with id="history-deposit"
    for (let question of calcHistory){
       $('#history-deposit').append(`
-         <li>${question.string}</li>
+         <li id="${x}">${question.string}</li>
       `)
+      x++
    }
 }
