@@ -13,6 +13,8 @@ function onReady() {
    $('.operator-btn').on('click', setOperator)
 
    $('#equals-Submit').on('click', equalsSubmit)
+
+   $('#clear-inputs').on('click', clearInputField)
  }
 
 //Capture math operation and POST to server
@@ -44,13 +46,10 @@ function equalsSubmit(event) {
    )
 
    //reset input fields on function call
-   //resetInput()
-   $('#num1').val('');
-   $('#num2').val('');
+   // and clear out selected operator
+    calcReset();
 
    console.log(calculatedQuestion);
-
-   $('.operator-btn').removeClass('blued-out')
 
    getCalcHistory();
 }// End equalsSubmit
@@ -124,4 +123,20 @@ function updateHistory(calcHistory){
       `)
       x++
    }
+}
+
+function clearInputField(event) {
+   event.preventDefault();
+   console.log('in clearInputField');
+   calcReset();
+}
+
+function calcReset(){
+   
+   // Clear out num1 and num2 fields
+   $('#num1').val('');
+   $('#num2').val('');
+
+   // reset chosen operator
+   $('.operator-btn').removeClass('blued-out')
 }
