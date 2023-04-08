@@ -14,17 +14,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 */
 
 // Example GET request
-app.get('/thing', (req, res) => {
-   console.log('GET /thing request received!');
-   res.send('GET /thing response');
+app.get('/calculator', (req, res) => {
+   console.log('GET /calculator request received!');
+   res.send('GET /calculator response');
 })// End Example GET request
 
 
 // Example POST request
-app.post('/thing', (req, res) => {
-   console.log('POST /thing request received');
+app.post('/calculator', (req, res) => {
+   console.log('POST /calculator request received');
    let requestedThing = req.body;
-   console.log('POST /thing request:', requestedThing);
+   console.log('POST /calculator request:', requestedThing);
 
    res.sendStatus(201);
 })// End Example POST request
