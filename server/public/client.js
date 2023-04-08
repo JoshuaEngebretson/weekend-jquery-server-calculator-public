@@ -98,7 +98,7 @@ function getCalcHistory() {
          updateHistory(response);
          $('#answer-deposit').empty();
          $('#answer-deposit').append(`
-            <h3>${response[response.length-1].answer}</h3>
+            <h2>${response[response.length-1].answer}</h2>
          `);
       }
    ).catch(
@@ -112,9 +112,13 @@ function getCalcHistory() {
 
 function updateHistory(calcHistory){
 
-   console.log('in updateHistory');
-   // //loop through historyArray
-   // for (let question of calcHistory){
+   $('#history-deposit').empty();
 
-   // }
+   //loop through historyArray and add new list item
+   // to ul with id="history-deposit"
+   for (let question of calcHistory){
+      $('#history-deposit').append(`
+         <li>${question.string}</li>
+      `)
+   }
 }
