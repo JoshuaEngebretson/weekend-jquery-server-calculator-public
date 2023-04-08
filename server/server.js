@@ -28,8 +28,8 @@ app.post('/calculator', (req, res) => {
    console.log('POST /calculator request received');
    let newQuestion = req.body;
 
-   let num1 = newQuestion.num1
-   let num2 = newQuestion.num2
+   let num1 = Number(newQuestion.num1)
+   let num2 = Number(newQuestion.num2)
    let operator = newQuestion.operator
 
    let answer = calculator(num1, num2, operator)

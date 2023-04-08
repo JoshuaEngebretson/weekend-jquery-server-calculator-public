@@ -95,7 +95,11 @@ function getCalcHistory() {
       function (response) {
          console.log('GET /calculator call successful');
          console.log('response:', response);
-         updateHistory(response)
+         updateHistory(response);
+         $('#answer-deposit').empty();
+         $('#answer-deposit').append(`
+            <h3>${response[response.length-1].answer}</h3>
+         `);
       }
    ).catch(
       function (error) {
@@ -105,3 +109,12 @@ function getCalcHistory() {
    );
 }// End makeGetCall
 
+
+function updateHistory(calcHistory){
+
+   console.log('in updateHistory');
+   // //loop through historyArray
+   // for (let question of calcHistory){
+
+   // }
+}
