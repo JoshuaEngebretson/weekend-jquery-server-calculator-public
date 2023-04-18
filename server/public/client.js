@@ -7,14 +7,7 @@ function onReady() {
    //Call to get the page initially in sync with the server
    getCalcHistory();
 
-   //Create listener to declare value of operator
-   // example if clicked would assign operator
-   // value of 'add'
-   $('.operator-btn').on('click', setOperator)
-
-   $('#equals-Submit').on('click', equalsSubmit)
-
-   $('#clear-inputs').on('click', clearInputField)
+   clickListeners();
  }
 
 //Capture math operation and POST to server
@@ -139,4 +132,15 @@ function calcReset(){
 
    // reset chosen operator
    $('.operator-btn').removeClass('blued-out')
+}
+
+function clickListeners() {
+   //Create listener to declare value of operator
+   // example if clicked would assign operator
+   // value of 'add'
+   $('.operator-btn').on('click', setOperator);
+
+   $('#equals-Submit').on('click', equalsSubmit);
+
+   $('#clear-inputs').on('click', clearInputField);
 }
