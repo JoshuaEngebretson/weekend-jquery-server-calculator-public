@@ -4,21 +4,18 @@ let operator;
 
 
 function onReady() {
-   //Call to get the page initially in sync with the server
+
+   // Call to get the page initially in sync with the server
    getCalcHistory();
 
-   //Create listener to declare value of operator
-   // example if clicked would assign operator
-   // value of 'add'
-   $('.operator-btn').on('click', setOperator)
+   // Set up click listeners
+   clickListeners();
 
-   $('#equals-Submit').on('click', equalsSubmit)
-
-   $('#clear-inputs').on('click', clearInputField)
  }
 
-//Capture math operation and POST to server
+// Capture math operation and POST to server
 function equalsSubmit(event) {
+
    event.preventDefault();
    console.log('in equalsSubmit');
 
@@ -35,23 +32,22 @@ function equalsSubmit(event) {
       data: calculatedQuestion
    }).then(
       function (response) {
-         console.log('POST /calculator call successful');
-         console.log('response:', response);
+         ajaxSuccessLogs('Post /calculator successfull', response)
       }
    ).catch(
       function (error) {
-         console.log('POST /calculator call failed');
-         console.log('error:', error);
+         ajaxErrorLogs('POST /calculator failed', error)
       }
    )
 
-   //reset input fields on function call
-   // and clear out selected operator
+   // Reset input fields on function call
+   //  and clear out selected operator
     calcReset();
 
    console.log(calculatedQuestion);
 
    getCalcHistory();
+
 }// End equalsSubmit
 
 
@@ -63,24 +59,11 @@ function setOperator(event) {
    // buttons showing as blue ever
    $('.operator-btn').removeClass('blued-out')
 
+
    //Set value of operator depending on the id
    // of the button that was clicked.
-   if ($(this).attr('id') === 'add-btn') {
-      operator = 'add'
-      $(this).addClass('blued-out')
-   }// End if add
-   else if ($(this).attr('id') === 'subtract-btn'){
-      operator = 'subtract'
-      $(this).addClass('blued-out')
-   }// End if subtract
-   else if ($(this).attr('id') === 'multiply-btn'){
-      operator = 'multiply'
-      $(this).addClass('blued-out')
-   }// End if multiply
-   else if ($(this).attr('id') === 'divide-btn'){
-      operator = 'divide'
-      $(this).addClass('blued-out')
-   }// End if divide
+   selectedOperator($(this));
+
 }// End setOperator
 
 
@@ -92,18 +75,13 @@ function getCalcHistory() {
       url: '/calculator',
    }).then(
       function (response) {
-         console.log('GET /calculator call successful');
-         console.log('response:', response);
+         ajaxSuccessLogs('GET /caclulator successful', response);
          updateHistory(response);
-         $('#answer-deposit').empty();
-         $('#answer-deposit').append(`
-            <h2>${response[response.length-1].answer}</h2>
-         `);
+         appendAnswer(response);
       }
    ).catch(
       function (error) {
-         console.log('GET /calculator call failed');
-         console.log('error:', error);
+         ajaxErrorLogs('GET /calculator failed', error);
       }
    );
 }// End makeGetCall
@@ -113,23 +91,23 @@ function updateHistory(calcHistory){
 
    $('#history-deposit').empty();
 
-   let x = 0;
+   let indexNum = 0;
 
    //loop through historyArray and add new list item
    // to ul with id="history-deposit"
    for (let question of calcHistory){
-      $('#history-deposit').append(`
-         <li id="${x}">${question.string}</li>
-      `)
-      x++
+      appendQuestion(question, indexNum);
+      indexNum++
    }
 }
+
 
 function clearInputField(event) {
    event.preventDefault();
    console.log('in clearInputField');
    calcReset();
 }
+
 
 function calcReset(){
    
@@ -139,4 +117,61 @@ function calcReset(){
 
    // reset chosen operator
    $('.operator-btn').removeClass('blued-out')
+}
+
+
+function clickListeners() {
+   //Create listener to declare value of operator
+   // example if clicked would assign operator
+   // value of 'add'
+   $('.operator-btn').on('click', setOperator);
+
+   $('#equals-Submit').on('click', equalsSubmit);
+
+   $('#clear-inputs').on('click', clearInputField);
+}
+
+
+function ajaxErrorLogs(errorMessage, error) {
+   console.log(errorMessage);
+   console.log('error:', error);
+}
+
+
+function ajaxSuccessLogs(sucessMessage, response) {
+   console.log(sucessMessage);
+   console.log('response:', response);
+}
+
+
+function appendAnswer(response) {
+   $('#answer-deposit').empty();
+   $('#answer-deposit').append(`
+      <h2>${response[response.length-1].answer}</h2>
+   `);
+}
+
+function appendQuestion(question, indexNum) {
+   $('#history-deposit').append(`
+      <li id="${indexNum}">${question.string}</li>
+   `);
+}
+
+function selectedOperator(btnClicked) {
+   if (btnClicked.attr('id') === 'add-btn') {
+      operator = 'add'
+      btnClicked.addClass('blued-out')
+   }// End if add
+   else if (btnClicked.attr('id') === 'subtract-btn'){
+      operator = 'subtract'
+      btnClicked.addClass('blued-out')
+   }// End if subtract
+   else if (btnClicked.attr('id') === 'multiply-btn'){
+      operator = 'multiply'
+      btnClicked.addClass('blued-out')
+   }// End if multiply
+   else if (btnClicked.attr('id') === 'divide-btn'){
+      operator = 'divide'
+      btnClicked.addClass('blued-out')
+   }// End if divide
 }
