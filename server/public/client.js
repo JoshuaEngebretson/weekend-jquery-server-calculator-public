@@ -28,13 +28,11 @@ function equalsSubmit(event) {
       data: calculatedQuestion
    }).then(
       function (response) {
-         console.log('POST /calculator call successful');
-         console.log('response:', response);
+         ajaxSuccessLogs('Post /calculator successfull', response)
       }
    ).catch(
       function (error) {
-         console.log('POST /calculator call failed');
-         console.log('error:', error);
+         ajaxErrorLogs('POST /calculator failed', error)
       }
    )
 
@@ -85,18 +83,13 @@ function getCalcHistory() {
       url: '/calculator',
    }).then(
       function (response) {
-         console.log('GET /calculator call successful');
-         console.log('response:', response);
+         ajaxSuccessLogs('GET /caclulator successful', response);
          updateHistory(response);
-         $('#answer-deposit').empty();
-         $('#answer-deposit').append(`
-            <h2>${response[response.length-1].answer}</h2>
-         `);
+         appendAnswer(response);
       }
    ).catch(
       function (error) {
-         console.log('GET /calculator call failed');
-         console.log('error:', error);
+         ajaxErrorLogs('GET /calculator failed', error);
       }
    );
 }// End makeGetCall
@@ -106,15 +99,13 @@ function updateHistory(calcHistory){
 
    $('#history-deposit').empty();
 
-   let x = 0;
+   let indexNum = 0;
 
    //loop through historyArray and add new list item
    // to ul with id="history-deposit"
    for (let question of calcHistory){
-      $('#history-deposit').append(`
-         <li id="${x}">${question.string}</li>
-      `)
-      x++
+      appendQuestion(question, indexNum);
+      indexNum++
    }
 }
 
@@ -143,4 +134,27 @@ function clickListeners() {
    $('#equals-Submit').on('click', equalsSubmit);
 
    $('#clear-inputs').on('click', clearInputField);
+}
+
+function ajaxErrorLogs(errorMessage, error) {
+   console.log(errorMessage);
+   console.log('error:', error);
+}
+
+function ajaxSuccessLogs(sucessMessage, response) {
+   console.log(sucessMessage);
+   console.log('response:', response);
+}
+
+function appendAnswer(response) {
+   $('#answer-deposit').empty();
+   $('#answer-deposit').append(`
+      <h2>${response[response.length-1].answer}</h2>
+   `);
+}
+
+function appendQuestion(question, indexNum) {
+   $('#history-deposit').append(`
+      <li id="${indexNum}">${question.string}</li>
+   `);
 }
