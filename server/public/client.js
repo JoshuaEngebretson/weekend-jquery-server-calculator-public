@@ -4,14 +4,18 @@ let operator;
 
 
 function onReady() {
-   //Call to get the page initially in sync with the server
+
+   // Call to get the page initially in sync with the server
    getCalcHistory();
 
+   // Set up click listeners
    clickListeners();
+
  }
 
-//Capture math operation and POST to server
+// Capture math operation and POST to server
 function equalsSubmit(event) {
+
    event.preventDefault();
    console.log('in equalsSubmit');
 
@@ -36,13 +40,14 @@ function equalsSubmit(event) {
       }
    )
 
-   //reset input fields on function call
-   // and clear out selected operator
+   // Reset input fields on function call
+   //  and clear out selected operator
     calcReset();
 
    console.log(calculatedQuestion);
 
    getCalcHistory();
+
 }// End equalsSubmit
 
 
@@ -54,24 +59,11 @@ function setOperator(event) {
    // buttons showing as blue ever
    $('.operator-btn').removeClass('blued-out')
 
+
    //Set value of operator depending on the id
    // of the button that was clicked.
-   if ($(this).attr('id') === 'add-btn') {
-      operator = 'add'
-      $(this).addClass('blued-out')
-   }// End if add
-   else if ($(this).attr('id') === 'subtract-btn'){
-      operator = 'subtract'
-      $(this).addClass('blued-out')
-   }// End if subtract
-   else if ($(this).attr('id') === 'multiply-btn'){
-      operator = 'multiply'
-      $(this).addClass('blued-out')
-   }// End if multiply
-   else if ($(this).attr('id') === 'divide-btn'){
-      operator = 'divide'
-      $(this).addClass('blued-out')
-   }// End if divide
+   selectedOperator($(this));
+
 }// End setOperator
 
 
@@ -109,11 +101,13 @@ function updateHistory(calcHistory){
    }
 }
 
+
 function clearInputField(event) {
    event.preventDefault();
    console.log('in clearInputField');
    calcReset();
 }
+
 
 function calcReset(){
    
@@ -124,6 +118,7 @@ function calcReset(){
    // reset chosen operator
    $('.operator-btn').removeClass('blued-out')
 }
+
 
 function clickListeners() {
    //Create listener to declare value of operator
@@ -136,15 +131,18 @@ function clickListeners() {
    $('#clear-inputs').on('click', clearInputField);
 }
 
+
 function ajaxErrorLogs(errorMessage, error) {
    console.log(errorMessage);
    console.log('error:', error);
 }
 
+
 function ajaxSuccessLogs(sucessMessage, response) {
    console.log(sucessMessage);
    console.log('response:', response);
 }
+
 
 function appendAnswer(response) {
    $('#answer-deposit').empty();
@@ -157,4 +155,23 @@ function appendQuestion(question, indexNum) {
    $('#history-deposit').append(`
       <li id="${indexNum}">${question.string}</li>
    `);
+}
+
+function selectedOperator(btnClicked) {
+   if (btnClicked.attr('id') === 'add-btn') {
+      operator = 'add'
+      btnClicked.addClass('blued-out')
+   }// End if add
+   else if (btnClicked.attr('id') === 'subtract-btn'){
+      operator = 'subtract'
+      btnClicked.addClass('blued-out')
+   }// End if subtract
+   else if (btnClicked.attr('id') === 'multiply-btn'){
+      operator = 'multiply'
+      btnClicked.addClass('blued-out')
+   }// End if multiply
+   else if (btnClicked.attr('id') === 'divide-btn'){
+      operator = 'divide'
+      btnClicked.addClass('blued-out')
+   }// End if divide
 }
